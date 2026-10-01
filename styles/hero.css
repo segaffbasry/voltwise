@@ -1,0 +1,63 @@
+/* Hero: virya-energy.com .hero--v1, values from its theme CSS.
+     .hero__attachment   full-bleed grid cell, object-fit cover; becomes the 28px-radius card (Hero.tsx)
+     .hero__images       stacked in the same grid cell behind the film (z-index -1), each with its own width and
+                         aspect ratio: desktop 206/219/249/183/238px, ratios .854/.987/.973/.785/.856,
+                         z-index 5/2/3/1/4, radius 28px (16px and 12px on the smaller breakpoints)
+     .hero__desc         max-width 864px, rises in under the collage
+   Without JS or with reduced motion, .is-scroll is never added: the film stays full-bleed and the description sits
+   in the flow underneath it. */
+.hero { position: relative; background: var(--paper); }
+.hero-stage { position: relative; display: grid; grid-template-rows: 100svh auto; place-items: center; }
+.hero-stage > * { grid-column: 1; }
+.hero-images, .hero-film, .hero-content { grid-row: 1; }
+
+.hero-images {
+  --w0: 74px; --w1: 78px; --w2: 89px; --w3: 65px; --w4: 82px; --r: 12px;
+  position: relative; z-index: 1; display: grid; place-items: center; visibility: hidden;
+}
+.hero.is-scroll .hero-images { visibility: visible; }
+.hero-img { grid-area: 1 / 1; will-change: transform; }
+.hero-img-tilt { width: 100%; height: 100%; }
+.hero-img img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r); }
+.hero-img-0 { width: var(--w0); aspect-ratio: .854; z-index: 5; }
+.hero-img-1 { width: var(--w1); aspect-ratio: .987; z-index: 2; }
+.hero-img-2 { width: var(--w2); aspect-ratio: .973; z-index: 3; }
+.hero-img-3 { width: var(--w3); aspect-ratio: .785; z-index: 1; }
+.hero-img-4 { width: var(--w4); aspect-ratio: .856; z-index: 4; }
+@media (min-width: 640px) { .hero-images { --w0: 120px; --w1: 140px; --w2: 180px; --w3: 120px; --w4: 170px; --r: 16px; } }
+@media (min-width: 1024px) { .hero-images { --w0: 206px; --w1: 219px; --w2: 249px; --w3: 183px; --w4: 238px; --r: 28px; } }
+
+.hero-film { position: relative; z-index: 2; width: 100%; height: 100%; overflow: hidden; border-radius: 0; will-change: width, height, transform;
+  /* The poster frame doubles as the card's ground, so the card is never see-through while the film loads or pauses. */
+  background: var(--forest) url("/media/hero-poster.jpg") center / cover no-repeat; }
+.hero-film-tilt { position: relative; width: 100%; height: 100%; }
+.hero-film video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Green veil over the film: the preloader's ground colour, so the handover shows no jump, and it keeps the
+   headline legible on the film's bright skies. It clears as the film becomes a card. */
+.hero-film-veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest) 62%, transparent), color-mix(in srgb, var(--green) 30%, transparent) 50%, color-mix(in srgb, var(--forest) 68%, transparent));
+}
+
+.hero-content { position: relative; z-index: 3; text-align: center; color: var(--paper); padding-top: var(--header-h); }
+.hero-title { color: var(--paper); font-size: var(--fs-h1); line-height: .96; letter-spacing: -.02em; }
+.hero-line { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero-line > span { display: block; }
+.hero-sub { margin-top: clamp(16px, 2vw, 24px); font-size: var(--fs-lede); color: var(--paper); }
+.hero-buttons { margin-top: clamp(24px, 3vw, 36px); display: flex; justify-content: center; gap: 8px 16px; flex-wrap: wrap; }
+
+.hero-desc { grid-row: 2; max-width: 864px; padding: var(--section-y) var(--gutter) 0; text-align: center; }
+.hero-desc .lede { margin-top: 20px; max-width: 62ch; margin-inline: auto; }
+/* Scroll mode: the description hangs a fixed distance under the collage's lowest photo (--below per breakpoint,
+   from Virya's image sizes and offsets) after the collage lifts by --lift (set by Hero.tsx). */
+.hero { --below: 112px; }
+@media (min-width: 640px) { .hero { --below: 214px; } }
+@media (min-width: 1024px) { .hero { --below: 250px; } }
+.hero.is-scroll .hero-desc { grid-row: 1; align-self: start; position: absolute; z-index: 4; left: 0; right: 0; margin-inline: auto; top: calc(50% + var(--lift, -150px) + var(--below)); padding: 0 var(--gutter); }
+.hero.is-scroll .hero-stage { grid-template-rows: 100svh; }
+
+/* While the intro plays, the hero copy and the film's zoom are held by GSAP; without JS everything is in place. */
+html.is-loading .hero-content { visibility: hidden; }
+.hero-film-zoom { position: absolute; inset: 0; }
+/* Phones: the two hero buttons stack at one width. */
+@media (max-width: 639px) { .hero-buttons .btn { min-width: 200px; justify-content: center; } }

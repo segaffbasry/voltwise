@@ -1,0 +1,76 @@
+/* Homepage sections. Layout logic from virya-energy.com: a light ground, rounded 28px image blocks and cards,
+   one deep-green statement card, two-tone headings, generous but not oversized type. */
+
+/* Pillars: the BESS photograph with three white cards overlapping its lower edge. */
+.pillars { padding-top: 0; }
+.pillars-image { aspect-ratio: 2400 / 1080; max-height: 620px; width: 100%; }
+.pillars-list { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin: calc(-1 * clamp(56px, 7vw, 96px)) clamp(16px, 3vw, 40px) 0; }
+.pillar { padding: clamp(22px, 2.2vw, 32px); box-shadow: 0 18px 40px -28px color-mix(in srgb, var(--ink) 45%, transparent); }
+.pillar p { margin-top: 10px; color: var(--muted); max-width: 40ch; }
+@media (max-width: 860px) {
+  .pillars-image { aspect-ratio: 4 / 3; }
+  .pillars-list { grid-template-columns: 1fr; margin: -48px 12px 0; }
+}
+
+/* Who we are: Virya's statistic block, a tall green card beside a 2 × 2 grid of white figure cards. */
+.who-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: var(--gap); align-items: stretch; }
+.who-card {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;
+  padding: clamp(28px, 3.4vw, 48px); border-radius: var(--r-card); background: var(--green-ground); color: var(--white);
+}
+.who-card .h2 { color: var(--white); }
+.who-copy { display: grid; gap: 14px; max-width: 58ch; }
+.who-card .btn { margin-top: auto; }
+.who-figures { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.figure { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: clamp(22px, 2.4vw, 34px); min-height: 200px; }
+.figure-value { font-family: var(--font-display); font-size: clamp(44px, 5vw, 72px); line-height: .9; letter-spacing: -.03em; color: var(--ink); display: flex; align-items: baseline; }
+.figure-unit { font-size: .5em; margin-left: .08em; color: var(--green); letter-spacing: 0; }
+.figure-label { color: var(--muted); max-width: 26ch; line-height: 1.4; }
+@media (max-width: 960px) { .who-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .who-figures { gap: 12px; } .figure { min-height: 0; padding: 18px; gap: 14px; } .figure-value { font-size: 44px; } .figure-label { font-size: 14px; } }
+
+/* Accelerating net zero: copy left, film right. */
+.netzero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.netzero-copy { display: grid; gap: 18px; justify-items: start; max-width: 600px; }
+.netzero-copy .lede { color: var(--ink); }
+.ticks { display: grid; gap: 10px; }
+.ticks li { display: flex; gap: 14px; align-items: baseline; }
+.tick { flex: none; width: 10px; height: 10px; border-radius: 3px; background: var(--lime); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--green) 50%, transparent); transform: translateY(-1px); }
+.netzero-copy .btn { margin-top: 8px; }
+.netzero-film { aspect-ratio: 4 / 5; max-height: 640px; width: 100%; background: var(--forest) url("/media/engineers-poster.jpg") center / cover no-repeat; }
+@media (max-width: 860px) { .netzero-grid { grid-template-columns: 1fr; } .netzero-film { aspect-ratio: 16 / 11; } }
+
+/* Powered by Sandbrook: image-led panel, copy bottom-left on an Ink-to-transparent veil. */
+.sandbrook-panel { min-height: clamp(420px, 44vw, 580px); display: grid; align-items: end; }
+.sandbrook-panel > img { position: absolute; inset: 0; }
+.sandbrook-panel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--ink) 78%, transparent), color-mix(in srgb, var(--ink) 20%, transparent) 70%); pointer-events: none; }
+.sandbrook-copy { position: relative; z-index: 2; display: grid; gap: 20px; justify-items: start; max-width: 560px; padding: clamp(28px, 4vw, 56px); color: var(--paper); }
+.sandbrook-title { display: grid; gap: 14px; }
+.sandbrook-title .label { color: var(--lime); font-family: var(--font-body); letter-spacing: .08em; text-transform: uppercase; font-size: 13px; }
+.sandbrook-logo { width: clamp(200px, 22vw, 300px); height: auto; }
+.sandbrook-copy .lede { color: var(--paper); }
+
+/* Latest news: four cards. */
+.news-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+.post { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+.post-image { display: block; overflow: hidden; border-radius: var(--r-sm); aspect-ratio: 4 / 3; background: var(--white); }
+.post-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.post:hover .post-image img, .post:focus-visible .post-image img { transform: scale(1.04); }
+.post-date { margin-top: 6px; font-size: var(--fs-small); color: var(--green); font-weight: 600; }
+.post-title { font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.post-sub { color: var(--muted); font-size: 15px; line-height: 1.45; }
+.post-more { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: var(--ink); }
+.post-more .arrow { width: 9px; height: 9px; transition: transform .35s var(--ease); }
+.post:hover .post-more .arrow, .post:focus-visible .post-more .arrow { transform: translateX(4px); }
+@media (max-width: 1100px) { .news-grid { grid-template-columns: repeat(2, 1fr); row-gap: 40px; } }
+@media (max-width: 560px) { .news-grid { grid-template-columns: 1fr; } }
+
+/* Closing calls to action: Virya's rounded pre-footer card, twice. */
+.enquire { padding-top: 0; }
+.enquire-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.enquire-card { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 32px; min-height: clamp(240px, 22vw, 320px); padding: clamp(28px, 3.4vw, 48px); border-radius: var(--r-card); }
+.enquire-green { background: var(--green-ground); }
+.enquire-green .h3 { color: var(--white); }
+.enquire-lime { background: var(--lime); }
+.enquire-lime .tone { color: var(--forest); }
+@media (max-width: 860px) { .enquire-grid { grid-template-columns: 1fr; } .enquire-card { min-height: 0; } }

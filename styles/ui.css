@@ -1,0 +1,64 @@
+/* Buttons: Virya's c-button (theme CSS), values copied:
+     .c-button { border-radius: 18px; padding: 17px 28px; line-height: 1.1; transition: .3s ease-out }
+     .c-button:hover, :focus { transform: scale(.97) }
+     .has-icon { gap: 8px } · .c-button__icon svg { width: 9px; height: 9px; stroke: currentColor }
+     --primary   orange fill; an :after veil (opacity .1) turns dark on hover
+     --secondary dark green fill; turns light with dark text on hover
+     --white     light fill with a 1px light border (padding 15px 26px); turns clear with light text on hover
+     --small     beige chip (radius 9px); lifts to white on hover */
+.btn {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; overflow: hidden;
+  padding: 17px 28px; border-radius: var(--r-btn); border: 1px solid transparent;
+  font: 500 16px/1.1 var(--font-body); letter-spacing: -.02em; white-space: nowrap;
+  transition: background-color var(--dur-btn) var(--ease-btn), color var(--dur-btn) var(--ease-btn), border-color var(--dur-btn) var(--ease-btn), transform var(--dur-btn) var(--ease-btn);
+  user-select: none; touch-action: manipulation;
+}
+.btn > span:first-child { position: relative; z-index: 2; padding-top: .1em; }
+.btn-icon { position: relative; z-index: 2; display: inline-flex; }
+.btn .arrow { width: 9px; height: 9px; }
+.btn:hover, .btn:focus-visible { transform: scale(.97); }
+.btn-sm { padding: 12px 18px; font-size: 15px; }
+
+/* primary → Lime, Ink text; the veil darkens it on hover */
+.btn-lime { background: var(--lime); color: var(--ink); }
+.btn-lime::after { content: ""; position: absolute; inset: 0; z-index: 1; background: transparent; opacity: .1; pointer-events: none; transition: background-color var(--dur-btn) var(--ease-btn); }
+.btn-lime:hover::after, .btn-lime:focus-visible::after { background: var(--ink); }
+/* secondary → Green, turns Paper with Ink text */
+.btn-green { background: var(--forest); color: var(--white); }
+.btn-green:hover, .btn-green:focus-visible { background: var(--paper); color: var(--ink); border-color: var(--line); }
+/* white (on film and photos) → outlined, clears on hover */
+.btn-light { background: var(--paper); color: var(--ink); border-color: var(--paper); padding: 15px 26px; }
+.btn-light:hover, .btn-light:focus-visible { background: transparent; color: var(--paper); transform: scale(1); }
+/* small/being chip → Paper tint, lifts to white */
+.btn-paper { background: color-mix(in srgb, var(--ink) 6%, var(--paper)); color: var(--ink); padding: 13px 20px; border-radius: 12px; }
+.btn-paper:hover, .btn-paper:focus-visible { background: var(--white); }
+/* ink (on Lime) → Ink fill, turns Paper */
+.btn-ink { background: var(--ink); color: var(--paper); }
+.btn-ink:hover, .btn-ink:focus-visible { background: var(--paper); color: var(--ink); }
+
+.u-link { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .45s var(--ease); }
+.u-link:hover, .u-link:focus-visible { background-size: 100% 1px; }
+
+.section { padding-block: var(--section-y); }
+.section-paper { background: var(--paper); }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 3.4vw, 48px); }
+
+.card { background: var(--white); border-radius: var(--r-card); }
+.media { position: relative; overflow: hidden; border-radius: var(--r-card); background: color-mix(in srgb, var(--forest) 30%, var(--paper)); }
+.media img, .media video { width: 100%; height: 100%; object-fit: cover; }
+
+/* Film control: a small round button on the film, paper on a translucent ink disc. */
+.film-toggle {
+  position: absolute; right: 16px; bottom: 16px; z-index: 4; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--paper);
+  background: color-mix(in srgb, var(--ink) 55%, transparent); backdrop-filter: blur(6px);
+  transition: background-color var(--dur-btn) var(--ease-btn), transform var(--dur-btn) var(--ease-btn);
+}
+.film-toggle:hover, .film-toggle:focus-visible { background: var(--ink); transform: scale(.94); }
+.film-toggle svg { width: 12px; height: 12px; }
+
+.socials { display: flex; gap: 14px; }
+.socials a { display: inline-flex; transition: color var(--dur-btn) var(--ease-btn); }
+.langs { display: flex; gap: 14px; font-size: 15px; }
+.langs a { opacity: .6; transition: opacity var(--dur-btn) var(--ease-btn); }
+.langs a[aria-current], .langs a:hover, .langs a:focus-visible { opacity: 1; }

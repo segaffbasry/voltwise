@@ -1,0 +1,129 @@
+/* Tokens, type and base. Palette (confirmed 2026-10-01), every value from voltwisepower.com's Webflow CSS variables:
+     --green   #15883c  --primary
+     --forest  #106e30  --second-gradient-color (Green's own dark shade, used where small text sits on green)
+     --lime    #ccf375  --accent
+     --ink     #232323  --heading-color
+     --paper   #f3f6f4  the live site's light section ground
+   White is used only for cards and type on dark grounds. No other hues anywhere (glows, hovers, focus rings included). */
+
+@font-face {
+  /* "Overpass Custom Font": Overpass-VariableFont_wght.ttf from the live Webflow CSS, subset to woff2 by scripts/fonts.sh */
+  font-family: "Overpass";
+  src: url("/fonts/overpass.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  /* "Anek Latin Custom Font": AnekLatin-VariableFont_wdth,wght.ttf from the live Webflow CSS */
+  font-family: "Anek Latin";
+  src: url("/fonts/anek.woff2") format("woff2");
+  font-weight: 100 800;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+
+:root {
+  --green: #15883c;
+  --forest: #106e30;
+  --lime: #ccf375;
+  --ink: #232323;
+  --paper: #f3f6f4;
+  --white: #fff;
+  --text: color-mix(in srgb, var(--ink) 86%, var(--paper)); /* the live body colour #424242 is Ink at this strength */
+  --muted: color-mix(in srgb, var(--ink) 62%, var(--paper));
+  --line: color-mix(in srgb, var(--ink) 12%, transparent);
+  /* The live hero ground: `linear-gradient(#15883c 5%, #15883c 25%, #106e30)`. */
+  --green-ground: linear-gradient(180deg, var(--green) 5%, var(--green) 25%, var(--forest));
+
+  --font-body: "Overpass", system-ui, sans-serif;
+  --font-display: "Anek Latin", "Overpass", system-ui, sans-serif;
+
+  /* Easing family (lib/ease.ts): power1.out, plus Virya's button transition (.3s ease-out). */
+  --ease: cubic-bezier(.25, .46, .45, .94);
+  --ease-btn: ease-out;
+  --dur-btn: .3s;
+
+  /* Virya radii: buttons 18px, cards and the hero card 28px, small images 16px. */
+  --r-btn: 18px;
+  --r-card: 28px;
+  --r-sm: 16px;
+
+  /* Spacing scale (brief: 64–96px desktop, 48–64px mobile; house rule ≤ 88px). Virya's own 120–180px is not used. */
+  --gutter: clamp(16px, 3.4vw, 40px);
+  --section-y: clamp(48px, 6.4vw, 88px);
+  --gap: clamp(16px, 1.8vw, 24px);
+  --max: 1360px;
+  --header-h: 84px;
+
+  /* Type scale. Virya at 1440: h1 112px, h2 75px, h3 60px, body 16px, all with -2% tracking. Headings here sit a step
+     lower (h2 64, h3 40) so the page keeps a considered size; body is 17px Overpass for its taller x-height. */
+  --fs-h1: clamp(52px, 7.8vw, 112px);
+  --fs-h2: clamp(34px, 4.4vw, 64px);
+  --fs-h3: clamp(26px, 2.8vw, 40px);
+  --fs-h4: clamp(19px, 1.5vw, 22px);
+  --fs-lede: clamp(18px, 1.45vw, 21px);
+  --fs-body: 17px;
+  --fs-small: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--paper); }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font: 400 var(--fs-body)/1.55 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, video, svg { display: block; max-width: 100%; }
+img, video { height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+ul { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3, h4, p, figure, address { margin: 0; font-style: normal; }
+h1, h2, h3 { color: var(--ink); font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+[data-tone="dark"] :focus-visible, .site-footer :focus-visible { outline-color: var(--lime); }
+::selection { background: var(--lime); color: var(--ink); }
+
+.wrap { width: 100%; max-width: calc(var(--max) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.h2 { font-size: var(--fs-h2); line-height: 1.05; }
+.h3 { font-size: var(--fs-h3); line-height: 1.1; }
+.h4 { font-family: var(--font-body); font-size: var(--fs-h4); font-weight: 600; line-height: 1.25; letter-spacing: -.01em; color: var(--ink); }
+.lede { font-size: var(--fs-lede); line-height: 1.5; color: var(--text); }
+.label { font-size: var(--fs-small); font-weight: 600; letter-spacing: .02em; }
+/* Two-tone headings: the second phrase takes the ground's accent (Green on light, Lime on dark). */
+.tone { color: var(--green); }
+[data-tone="dark"] .tone { color: var(--lime); }
+
+.skip-link { position: fixed; left: 16px; top: 16px; z-index: 200; padding: 12px 18px; border-radius: var(--r-btn); background: var(--ink); color: var(--paper); transform: translateY(-160%); }
+.skip-link:focus { transform: none; }
+main:focus, section:focus, #top:focus { outline: none; }
+
+/* Reveal start states: hidden before first paint only when JS runs with motion (html.js), lifted by data-shown. */
+html.js [data-reveal="label"]:not([data-shown]),
+html.js [data-reveal="heading"]:not([data-shown]),
+html.js [data-reveal="card"]:not([data-shown]) { opacity: 0; }
+html.js [data-reveal="image"]:not([data-shown]) { clip-path: inset(100% 0 0 0); }
+.wm { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.wi { display: inline-block; will-change: transform; }
+
+/* Preloader (components/Preloader.tsx). Its ground is the hero's opening scene colour. */
+.preloader { position: fixed; inset: 0; z-index: 150; display: none; pointer-events: none; }
+html.is-loading .preloader, html.is-landing .preloader { display: grid; place-items: center; }
+html.is-loading { overflow: hidden; }
+.preloader-ground { position: absolute; inset: 0; background: var(--green-ground); clip-path: inset(0 0 0 0); }
+.preloader-sign { position: relative; visibility: hidden; color: var(--paper); }
+.preloader .logo { width: clamp(180px, 22vw, 300px); height: auto; overflow: visible; }
+.preloader .logo path { transform-box: fill-box; }
+/* Nothing of the page shows before the loader paints: the hero copy and header wait under it. */
+html.is-loading .site-header, html.is-landing .site-header .brand { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .preloader { display: none !important; }
+}
