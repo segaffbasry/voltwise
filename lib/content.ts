@@ -46,11 +46,10 @@ export const whoWeAre = {
     "Using BESS to balance the grid at the most critical times is just the beginning for Voltwise. We believe there’s a better way to use data to operate our BESS assets to accelerate net zero.",
   ],
   cta: { label: "Learn more", href: `${LIVE}/about` },
-  /* Figures stated in the homepage's own copy and news feed, set as a number row in the place Virya puts its
-     "in a few numbers" cards. Each label quotes or closely follows the line it comes from. */
+  /* Figures stated in the homepage's own copy and news feed, set where Virya puts its "in a few numbers" cards.
+     Each label quotes or closely follows the line it comes from. */
+  // 460MW and the 11 projects are told by the projects heatmap right after this section.
   figures: [
-    { value: "460", unit: "MW", label: "of BESS operational and under construction" },
-    { value: "11", unit: "", label: "projects in our UK portfolio" },
     { value: "2", unit: "", label: "launch markets: the UK and Germany" },
     { value: "£154", unit: "m", label: "acquisition financing closed and syndicated" },
   ],
@@ -108,3 +107,16 @@ export const enquire = [
   { title: ["Talk to us about", "your BESS project"], cta: { label: "Contact us", href: `${LIVE}/contact?enquiry=4` } },
   { title: ["Are you a landowner", "interested in knowing how BESS could work for you?"], cta: { label: "Contact us", href: `${LIVE}/contact?enquiry=3` } },
 ];
+
+/* "Our projects", from the live /projects page (title, intro, the "Operational" status and the 11 projects with their
+   capacities). Positions on the map: lib/uk-map.ts, read off the live projects map. */
+export const projects = {
+  title: ["Our", "projects"],
+  intro: "The first 11 projects in our UK portfolio. Each one reflects our commitment to providing intelligent, flexible BESS where it matters most.",
+  status: "Operational",
+  totalLabel: "of projects that are operational and under construction", // /projects: "We have 460MW of projects that are…"
+  cta: { label: "Discover our projects", href: `${LIVE}/projects` },
+};
+
+/* The ticker band: three lines the live site already uses (hero h1, hero strapline, "Made for Net Zero"). */
+export const ticker = ["Intelligent Energy Storage", "Accelerating the path to net zero", "Made for Net Zero"];

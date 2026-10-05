@@ -2,7 +2,7 @@ import { Button, TwoTone } from "@/components/ui";
 import { whoWeAre } from "@/lib/content";
 
 /* "Who we are": Virya's "in a few numbers" block. A tall green card carries the heading, copy and button; the
-   figures from the same copy sit in four white cards beside it. */
+   figures from the same copy sit in two white cards beside it (their numbers count up on entry). */
 export function WhoWeAre() {
   return <section className="who section" id="who-we-are" tabIndex={-1} aria-labelledby="who-title">
     <div className="wrap who-grid">
@@ -15,7 +15,7 @@ export function WhoWeAre() {
       </div>
       <ul className="who-figures">
         {whoWeAre.figures.map((f) => <li key={f.label} className="figure card" data-reveal="card">
-          <p className="figure-value"><span>{f.value}</span>{f.unit && <span className="figure-unit">{f.unit}</span>}</p>
+          <p className="figure-value"><span>{f.value.startsWith("£") && "£"}<span data-count={f.value.replace("£", "")}>{f.value.replace("£", "")}</span></span>{f.unit && <span className="figure-unit">{f.unit}</span>}</p>
           <p className="figure-label">{f.label}</p>
         </li>)}
       </ul>

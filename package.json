@@ -10,7 +10,8 @@
     "media": "sh scripts/media.sh",
     "logo": "python3 scripts/logo.py",
     "fonts": "sh scripts/fonts.sh",
-    "links": "node scripts/check-links.mjs"
+    "links": "node scripts/check-links.mjs",
+    "map": "node scripts/map.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -23,6 +24,9 @@
     "@types/node": "^20.19.43",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "typescript": "^5.9.3"
+    "d3-geo": "^3.1.1",
+    "topojson-client": "^3.1.0",
+    "typescript": "^5.9.3",
+    "world-atlas": "^2.0.2"
   }
 }
