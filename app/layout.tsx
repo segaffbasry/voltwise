@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#15883c" };
 
-/* `js` (and the preloader's `is-loading`/`is-landing`) is set before first paint, unless reduced motion is requested
-   or the intro already played in this browser session, so reveal targets start hidden without a flash. Without
+/* `js` (and the preloader's `is-loading`/`is-landing`) is set before first paint, unless reduced motion is requested,
+   so reveal targets start hidden without a flash. Without
    JavaScript the classes are never added and everything renders in place; the <noscript> style hides the preloader. */
-const boot = "(function(){var d=document.documentElement;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('js');var seen=false;try{seen=sessionStorage.getItem('voltwise-intro')==='1'}catch(e){}if(!seen)d.classList.add('is-loading','is-landing')})()";
+const boot = "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js','is-loading','is-landing')";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

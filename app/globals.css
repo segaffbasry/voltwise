@@ -112,16 +112,22 @@ html.js [data-reveal="image"]:not([data-shown]) { clip-path: inset(100% 0 0 0); 
 .wm { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
 .wi { display: inline-block; will-change: transform; }
 
-/* Preloader (components/Preloader.tsx). Its ground is the hero's opening scene colour. */
+/* Loading screen (components/Preloader.tsx). Forest ground charging to Green from the bottom, its edge lit Lime;
+   the charged colour is the hero veil's, so the handover shows no jump. */
 .preloader { position: fixed; inset: 0; z-index: 150; display: none; pointer-events: none; }
 html.is-loading .preloader, html.is-landing .preloader { display: grid; place-items: center; }
 html.is-loading { overflow: hidden; }
-.preloader-ground { position: absolute; inset: 0; background: var(--green-ground); clip-path: inset(0 0 0 0); }
+.preloader-ground { position: absolute; inset: 0; background: var(--forest); clip-path: inset(0 0 0 0); overflow: hidden; }
+.preloader-charge { position: absolute; inset: 0; background: var(--green); opacity: 0; box-shadow: 0 -2px 0 var(--lime), 0 -18px 40px -10px color-mix(in srgb, var(--lime) 55%, transparent); }
 .preloader-sign { position: relative; visibility: hidden; color: var(--paper); }
-.preloader .logo { width: clamp(180px, 22vw, 300px); height: auto; overflow: visible; }
+.preloader .logo { width: clamp(200px, 26vw, 380px); height: auto; overflow: visible; }
 .preloader .logo path { transform-box: fill-box; }
+.preloader-meta { position: absolute; left: 0; right: 0; bottom: clamp(20px, 4vh, 44px); margin-inline: auto; display: flex; align-items: end; justify-content: space-between; gap: 24px; color: var(--paper); opacity: 0; }
+.preloader-line { font-size: var(--fs-small); letter-spacing: .02em; opacity: .8; padding-bottom: .6em; }
+.preloader-count { font-family: var(--font-display); font-size: clamp(56px, 9vw, 132px); line-height: .8; letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--lime); }
 /* Nothing of the page shows before the loader paints: the hero copy and header wait under it. */
 html.is-loading .site-header, html.is-landing .site-header .brand { visibility: hidden; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
