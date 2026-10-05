@@ -93,11 +93,11 @@ Eight sections in the live page's own order plus the projects heatmap from `/pro
 
 | Width × height | Total | Viewport heights |
 |---|---|---|
-| 1440 × 900 | 7,605px (includes the 990px hero pin) | 8.5 |
+| 1440 × 900 | 8,553px (includes the 990px hero pin and the 900px projects pin) | 9.5 |
 | 768 × 1024 | 9,082px | 8.9 |
-| 375 × 812 | 9,620px | 11.8 (single-column stacking) |
+| 375 × 812 | 9,630px | 11.9 (single-column stacking, no projects pin) |
 
-The page sits slightly over the 8-screen target since review 1 added the projects section the client asked for; the four "Who we are" figures were cut to two (460MW and the 11 projects now live in the heatmap) to offset it.
+The page sits over the 8-screen target since reviews 1 and 2 added the projects section and its pinned sequence, both at the client's request; the four "Who we are" figures were cut to two (460MW and the 11 projects now live in the heatmap) to offset it.
 
 ## Content counts: live homepage vs this build
 
@@ -147,13 +147,19 @@ The hero film only starts after the handover: Chrome stops painting a muted vide
 
 ## Our projects (heatmap)
 
-`components/home/Projects.tsx`, data in `lib/uk-map.ts`, outline in `public/media/uk-map.svg`, both from `scripts/map.mjs`:
+`components/home/Projects.tsx`, data in `lib/uk-map.ts`, outline in `public/media/uk-map.svg`, both from `scripts/map.mjs`.
+
+**Review 2 (5 Oct 2026):** "I want it scroll that grey bg expand to full. And make this most sophisticated." The section is now a three-act scroll piece:
+
+1. **Expand.** The Ink panel is full-bleed but clipped to a rounded card on the page's content edge (measured from a zero-height `.wrap` ruler, so it is exact at every width). As it rises, the clip opens to the screen edges and the 28px corners square off, scrubbed from "top bottom" to "top top"; the map scales up from 90% with it. The content never moves: it sits on the page grid inset by `--panel-pad`, as it did inside the card.
+2. **Charge the grid** (≥ 900px). The panel pins for one screen height. The scroll brings the 11 sites online one by one, north to south: bloom (with a slight overshoot) and dot light, the row turns on and its bar fills, the label card follows the newest site (name, MW, share of the 460MW), the counter adds the capacity, and a meter reads `07 / 11 sites`. Phones play the same sequence once, over 2.2s, when the panel enters.
+3. **Explore.** When everything is online, the dots keep a staggered Lime pulse and the heat breathes. Hovering or focusing a row lights its site (the other blooms dim) and vice versa. The map leans up to 5° toward the pointer.
+
+Reduced motion: no clip, no pin, every site online from the start. Without JS the server render shows the finished state.
 
 - **Outline:** Natural Earth 1:10m (world-atlas `countries-10m.json`): Great Britain + Northern Ireland, Ireland faint for context, Mercator fitted to mainland Britain, specks under 3px² dropped. Shipped as a 106KB static SVG, outside the JS bundle.
 - **Positions:** read off the live `/projects` map image. That image is a Web Mercator render, so it is calibrated on its own labelled cities (Edinburgh, Newcastle, Nottingham, Cardiff, London; least-squares fit) and each green dot is converted back to lat/lon (Wolverhampton, Brentwood and North Tawton land within ~0.1° of the real towns). Burwell I and II share a site; like the live map they sit side by side.
 - **Heat:** one radial bloom per site (Lime core to Green to clear), radius ∝ √MW, Gaussian-blurred and screen-blended, so the 50MW sites glow wider and neighbours (Burwell, Brook Farm, Brentwood) merge into one warm patch.
-- **Interaction:** hovering or focusing a row lights its site (Lime dot, label with name and MW, the other blooms dim); hovering a site lights its row. Rows are buttons, so the map is keyboard-reachable; a screen-reader caption lists every site and capacity.
-- **Entrance** (once, at 70% of the viewport): land fades up, the sites charge north to south (bloom, then dot with a small overshoot), the counter runs 0 to 460MW, the bars fill. Then each dot keeps a slow Lime pulse, staggered. With reduced motion everything renders in its final state.
 
 ## Motion system
 
