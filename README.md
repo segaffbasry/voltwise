@@ -13,6 +13,7 @@ npm run media      # re-download photography and films from the live CDN and re-
 npm run fonts      # re-download Overpass + Anek Latin from the live CSS and subset to woff2 (needs python3 + fontTools)
 npm run logo       # split the live wordmark SVG into lib/logo.ts (needs python3)
 npm run links      # check every outbound link against the live sitemap
+npm run map        # rebuild public/media/uk-map.svg + lib/uk-map.ts (Natural Earth outline + project positions)
 ```
 
 ## Routes
@@ -56,33 +57,47 @@ npm run links      # check every outbound link against the live sitemap
 | Palette | **Confirmed:** Green `#15883c` (with its own dark shade Forest `#106e30`), Lime `#ccf375`, Ink `#232323`, Paper `#f3f6f4`. White only for cards and type on dark grounds. |
 | Look + motion reference | virya-energy.com is both (one reference given). |
 | Copied interaction | **Confirmed:** Virya's hero, film to collage (below). |
-| Preloader | **Confirmed:** once per browser session. |
+| Preloader | Originally once per session; **since review 1, a loading screen on every load** (client asked for one). |
 | Typography | Overpass (UI/body) + Anek Latin (display): the live site's own two families. |
 | PostHog key | The standing Regen EU key (`lib/posthog.ts`), overridable with `NEXT_PUBLIC_POSTHOG_KEY`. |
 | "Website by VSNRY" | Left out of the footer: it credits the current site's agency, not Voltwise. |
 | Email address | Not shown: the live site obfuscates it everywhere. |
 
+## Review 1 (5 Oct 2026)
+
+Client feedback: "this is really nice! But… their website is kind of similar, we have just added more movement to their sections. Could we add like a loading screen?" and, on the live projects map, "could we do something with this? like a nice heatmap of projects?"
+
+| Ask | Change |
+|---|---|
+| Loading screen | The 1.7s once-per-session intro became a loading screen on every load: the Forest ground charges to Green like a battery (Lime edge) while a 0 to 100% counter runs and the wordmark builds; it waits for the hero's real assets (below). |
+| Heatmap of projects | New "Our projects" section: Great Britain with a heat bloom per site sized by capacity, a 460MW counter, the 11-project list with capacity bars, rows and sites linked on hover/focus (`Projects.tsx`). |
+| More movement, less like the live site | A Lime ticker band driven by scroll speed and direction (`Ticker.tsx`); photo panels that widen as they rise (`data-grow`); figures that count up (`data-count`); the heatmap's charge-up sequence and live pulses. |
+
 ## Page structure and pacing
 
-Seven sections in the live page's own order, imagery-led at the top. Spacing comes from one scale (`--section-y: clamp(48px, 6.4vw, 88px)`), with no section taller than its content except the pinned hero.
+Eight sections in the live page's own order plus the projects heatmap from `/projects` and a ticker band, imagery-led at the top. Spacing comes from one scale (`--section-y: clamp(48px, 6.4vw, 88px)`), with no section taller than its content except the pinned hero.
 
 | # | Section | Component | Imagery |
 |---|---|---|---|
 | 1 | Hero: film shrinks into a card among five photos; "Made for Net Zero" rises underneath | `Hero.tsx` | brand film + 5 photos |
 | 2 | Pillars over the BESS photograph | `Pillars.tsx` | BESS photo |
-| 3 | Who we are: green card + four figures | `WhoWeAre.tsx` | (text and figures) |
-| 4 | Accelerating net zero | `NetZero.tsx` | engineers film |
-| 5 | Powered by Sandbrook | `Sandbrook.tsx` | offshore photo |
-| 6 | Latest news (4) | `News.tsx` | 4 post images |
-| 7 | Two closing CTAs | `Enquire.tsx` | — |
+| 3 | Who we are: green card + two figures | `WhoWeAre.tsx` | (text and figures) |
+| 4 | Our projects: heatmap of the 11 UK sites | `Projects.tsx` | map |
+| – | Ticker band | `Ticker.tsx` | — |
+| 5 | Accelerating net zero | `NetZero.tsx` | engineers film |
+| 6 | Powered by Sandbrook | `Sandbrook.tsx` | offshore photo |
+| 7 | Latest news (4) | `News.tsx` | 4 post images |
+| 8 | Two closing CTAs | `Enquire.tsx` | — |
 
 **Page height** (measured in the browser, `document.documentElement.scrollHeight`):
 
 | Width × height | Total | Viewport heights |
 |---|---|---|
-| 1440 × 900 | 6,467px (includes the 990px hero pin) | 7.2 |
-| 768 × 1024 | 7,829px | 7.6 |
-| 375 × 812 | 8,269px | 10.2 (single-column stacking) |
+| 1440 × 900 | 7,605px (includes the 990px hero pin) | 8.5 |
+| 768 × 1024 | 9,082px | 8.9 |
+| 375 × 812 | 9,620px | 11.8 (single-column stacking) |
+
+The page sits slightly over the 8-screen target since review 1 added the projects section the client asked for; the four "Who we are" figures were cut to two (460MW and the 11 projects now live in the heatmap) to offset it.
 
 ## Content counts: live homepage vs this build
 
@@ -90,7 +105,8 @@ Seven sections in the live page's own order, imagery-led at the top. Spacing com
 |---|---|---|---|
 | Hero | 1 film, h1, line, 1 CTA | same + "Discover Voltwise" (scrolls to Who we are) | The second button mirrors Virya's two-button hero; it stays on the page. |
 | Pillars | 3 | 3 | |
-| Who we are | 3 paragraphs + photo | 3 paragraphs (first under the hero collage, two in the green card) + photo (with the pillars) + 4 figures | Figures restate the copy and news feed: 460MW, 11 projects, UK + Germany, £154m financing. |
+| Who we are | 3 paragraphs + photo | 3 paragraphs (first under the hero collage, two in the green card) + photo (with the pillars) + 2 figures | Figures restate the copy and news feed: UK + Germany, £154m financing. |
+| Our projects (from `/projects`) | not on the live homepage | title, intro, "Operational", all 11 projects with MW, 460MW total | Added at the client's request (review 1). |
 | Accelerating net zero | lead, intro, 3 bullets, close, film | same | |
 | Sandbrook | logo, line, photo, CTA | same | |
 | Latest news | 7 | **4** | Pacing cap: the four newest (Apr 2026 to Jun 2025). Not shown: "Voltwise readies first German BESS site for construction" (Oct 2024), "Q&A: Europe's BESS opportunity" (Jun 2024), "…equity commitment from Sandbrook Capital" (Jun 2023). "View all news" goes to `/news`. |
@@ -110,20 +126,34 @@ Source: `virya-energy.com/wp-content/themes/virya/assets/build/resources_js_bloc
 - **Curves as variables:** `--ease` / `"volt"` = power1.out (`lib/ease.ts`, `app/globals.css`).
 - **Side by side:** Virya's own pin did not initialise in the browser tool under viewport emulation (it waits 2s and a `ready` class before building), so the comparison is value for value against its source, not frame by frame. The order of moves, card size, radius and fan-out geometry match it. Voltwise's portrait film fills the 309×362 card naturally.
 
-## The opening moment (preloader)
+## The opening moment (loading screen)
 
-`components/Preloader.tsx`. Voltwise has no symbol, so the build plays the wordmark's three cuts as a spark of current:
+`components/Preloader.tsx`. Voltwise has no symbol, so the wordmark's three cuts play as a spark of current, while the screen charges like a battery behind it:
 
 | Time | Stage |
 |---|---|
-| 0.10 to 0.62s | `v o l t w i e` rise and fade in, 0.06s apart |
-| 0.50 to 0.85s | the spark: the t's wedge drops in and the two halves of the `s` close on the bolt, lit Lime, then cool to Paper |
-| 0.85 to 1.15s | hold |
-| 1.15 to 1.70s | the word glides into the header logo position (measured at exit time) while the Green ground wipes up, uncovering the film under its Green veil |
+| 0.10 to 0.65s | `v o l t w i e` rise and fade in, 0.06s apart; "Intelligent Energy Storage" and the counter fade up |
+| 0.10 to 1.40s | the Green charge rises from the bottom of the Forest ground (its edge lit Lime) and the counter runs to 90% |
+| then | waits for the hero's own assets (web fonts, the poster frame, `canplay` on the film), at most 0.8s more |
+| +0.35s | 90 to 100%; the spark: the t's wedge drops in and the two halves of the `s` close on the bolt, lit Lime |
+| +0.30s | the spark cools to Paper |
+| +0.60s | the counter lifts away, the word glides into the header logo position (measured at exit time) and the charged ground wipes up, uncovering the film under its Green veil |
 
-One GSAP timeline, 1.7s; handover at 1.25s: removes `is-loading`, sets `data-intro="done"`, dispatches `intro:done`. The hero headline lines, buttons, header and the film's 6% settle all wait for that event, so the exit and the entrance overlap. Lenis stays stopped until then. The ground is the live hero's own gradient (`#15883c` to `#106e30`), the same colour as the veil over the film's first frame, so there is no jump. Once per session (`sessionStorage["voltwise-intro"]`, decided by the boot script in `app/layout.tsx` before first paint), skipped with reduced motion, hidden by `<noscript>`, and a 2.2s failsafe ends it whatever happens. Stages were checked in screenshots at 0.4s (spark lit), 0.8s (full word) and 1.2s (wipe mid-exit).
+About 2.6s on a warm cache, never more than 3.4s (failsafe). This is longer than the brief's 2s on purpose: the client asked for a loading screen they would notice. Handover early in the exit: removes `is-loading`, sets `data-intro="done"`, dispatches `intro:done`; the hero headline, buttons, header and the film's settle wait for it and Lenis stays stopped until then. Plays on every load (boot script in `app/layout.tsx`, before first paint), skipped with reduced motion, hidden by `<noscript>`. Stages checked in screenshots at 0.8s (76%, letters building, charge edge visible), 1.8s (100%) and the exit.
+
+GSAP owns every transform on the charge layer (CSS only hides it with `opacity: 0` before hydration): an initial CSS `translate`/`transform` gets folded into GSAP's own `y` and pushes the fill off-screen.
 
 The hero film only starts after the handover: Chrome stops painting a muted video that starts autoplaying underneath a full-screen cover. The card also carries the poster frame as its CSS background, so it is never see-through.
+
+## Our projects (heatmap)
+
+`components/home/Projects.tsx`, data in `lib/uk-map.ts`, outline in `public/media/uk-map.svg`, both from `scripts/map.mjs`:
+
+- **Outline:** Natural Earth 1:10m (world-atlas `countries-10m.json`): Great Britain + Northern Ireland, Ireland faint for context, Mercator fitted to mainland Britain, specks under 3px² dropped. Shipped as a 106KB static SVG, outside the JS bundle.
+- **Positions:** read off the live `/projects` map image. That image is a Web Mercator render, so it is calibrated on its own labelled cities (Edinburgh, Newcastle, Nottingham, Cardiff, London; least-squares fit) and each green dot is converted back to lat/lon (Wolverhampton, Brentwood and North Tawton land within ~0.1° of the real towns). Burwell I and II share a site; like the live map they sit side by side.
+- **Heat:** one radial bloom per site (Lime core to Green to clear), radius ∝ √MW, Gaussian-blurred and screen-blended, so the 50MW sites glow wider and neighbours (Burwell, Brook Farm, Brentwood) merge into one warm patch.
+- **Interaction:** hovering or focusing a row lights its site (Lime dot, label with name and MW, the other blooms dim); hovering a site lights its row. Rows are buttons, so the map is keyboard-reachable; a screen-reader caption lists every site and capacity.
+- **Entrance** (once, at 70% of the viewport): land fades up, the sites charge north to south (bloom, then dot with a small overshoot), the counter runs 0 to 460MW, the bars fill. Then each dot keeps a slow Lime pulse, staggered. With reduced motion everything renders in its final state.
 
 ## Motion system
 
@@ -135,7 +165,10 @@ The hero film only starts after the handover: Chrome stops painting a muted vide
 | `text` | paragraphs | words rise out of a line mask, 0.08s between lines, 0.9s |
 | `label` | buttons, small links | 12px rise + fade, 0.6s |
 | `card` | pillars, figures, bullets, news, CTAs | Virya's `ScrollTrigger.batch`: 20px rise + fade, 0.2s apart, 0.8s |
-| `image` | photos and films | clip opens from the bottom (28px radius), 1.1s; `[data-parallax]` adds ±5% drift |
+| `image` | photos and films | clip opens from the bottom (28px radius), 1.1s; `[data-parallax]` adds ±5% drift; `[data-grow]` panels (pillars photo, Sandbrook) widen from 92% to full size as they rise, scrubbed |
+| `count` | figures | run up from zero once, 1.4s, power2.out |
+
+The ticker band (`Ticker.tsx`) idles at 40px/s and speeds up with the Lenis velocity (up to ~900px/s), reversing when the reader scrolls back up; static with reduced motion.
 
 No per-character effects outside the preloader and hero. Buttons are Virya's `c-button` (18px radius, `.3s ease-out`, `scale(.97)` on hover, 9px arrow) with its variants mapped onto the palette. The header has no bar: it takes Paper over `[data-tone="dark"]` areas (film, green cards, footer) and Ink elsewhere, hides on scroll down and returns on scroll up. The menu is a Green panel that opens from the toggle's corner as a rounded card (one GSAP timeline in, reversed out), with focus trap, Esc to close and focus returned to the toggle.
 
@@ -149,7 +182,7 @@ All from voltwisepower.com's Webflow CDN (`scripts/media.sh`): the homepage's BE
 
 - `robots: noindex, nofollow, nocache` (Next metadata), no sitemap, no robots.txt.
 - PostHog EU (`lib/posthog.ts`): pageview, pageleave, autocapture, session recording, surveys off; `site` and UTM properties registered; `scroll_depth` fires once each at 25/50/75/100.
-- Links never navigate: every href is the real URL (checked by `npm run links`: 20 links, all in the sitemap and answering 200, or external and live), but a capture-phase guard cancels clicks on anything not starting with `#`.
+- Links never navigate: every href is the real URL (checked by `npm run links`: 20 links (including the new `/projects` link), all in the sitemap and answering 200, or external and live), but a capture-phase guard cancels clicks on anything not starting with `#`.
 - No visible tracking or agency UI.
 
 ## Verification

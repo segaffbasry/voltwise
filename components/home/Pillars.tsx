@@ -6,7 +6,7 @@ import { pillars, pillarsImage } from "@/lib/content";
 export function Pillars() {
   return <section className="pillars section" aria-label="Why Voltwise">
     <div className="wrap">
-      <figure className="pillars-image media" data-reveal="image" data-parallax>
+      <figure className="pillars-image media" data-reveal="image" data-parallax data-grow>
         <Image src={pillarsImage.src} alt={pillarsImage.alt} width={pillarsImage.w} height={pillarsImage.h} sizes="(min-width: 1440px) 1360px, 100vw" />
       </figure>
       <ul className="pillars-list">

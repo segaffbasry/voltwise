@@ -21,7 +21,9 @@ if (typeof window !== "undefined") {
    heading  the whole phrase fades and rises 20px (Virya's fade-in: y 20 → 0, 1s), never split
    text     paragraphs: words rise out of a mask, one line a beat after another
    card     cards: Virya's ScrollTrigger.batch, 20px rise and fade, 0.2s apart
-   image    photography clips open from the bottom edge; [data-parallax] adds ±5% drift while it crosses the screen
+   image    photography clips open from the bottom edge; [data-parallax] adds ±5% drift while it crosses the screen;
+            [data-grow] panels widen from 92% to full size as they rise (scrubbed)
+   count    [data-count] figures run up from zero once
    All play once on power1.out ("volt"); inside [data-late] sections they run at 75% of the duration.
    Trigger line: Virya fires at "top 80%"; it is set a little lower here (85 to 90%) so short sections settle sooner. */
 export function usePageMotion() {
@@ -109,6 +111,17 @@ export function usePageMotion() {
       gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
         const media = el.querySelector("img, video"); if (!media) return;
         gsap.fromTo(media, { yPercent: -5, scale: 1.1 }, { yPercent: 5, scale: 1.1, ease: "none", scrollTrigger: { trigger: el, scrub: true, start: "top bottom", end: "bottom top" } });
+      });
+      // grow: large photo panels widen from 92% to full size while they travel up the screen (scrubbed).
+      gsap.utils.toArray<HTMLElement>("[data-grow]").forEach((el) => {
+        gsap.fromTo(el, { scale: .92 }, { scale: 1, ease: "none", scrollTrigger: { trigger: el, scrub: true, start: "top bottom", end: "top 30%" } });
+      });
+
+      // count: figures run up from zero to their value once, when they enter.
+      gsap.utils.toArray<HTMLElement>("[data-count]").forEach((el) => {
+        const to = Number(el.dataset.count), n = { v: 0 };
+        el.textContent = "0";
+        ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => gsap.to(n, { v: to, duration: 1.4 * scale(el), ease: "power2.out", onUpdate: () => { el.textContent = String(Math.round(n.v)); } }) });
       });
       mark();
     });

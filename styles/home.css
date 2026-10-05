@@ -13,7 +13,7 @@
 }
 
 /* Who we are: Virya's statistic block, a tall green card beside a 2 × 2 grid of white figure cards. */
-.who-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: var(--gap); align-items: stretch; }
+.who-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--gap); align-items: stretch; }
 .who-card {
   position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;
   padding: clamp(28px, 3.4vw, 48px); border-radius: var(--r-card); background: var(--green-ground); color: var(--white);
@@ -21,12 +21,12 @@
 .who-card .h2 { color: var(--white); }
 .who-copy { display: grid; gap: 14px; max-width: 58ch; }
 .who-card .btn { margin-top: auto; }
-.who-figures { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.who-figures { display: grid; grid-template-rows: 1fr 1fr; gap: var(--gap); }
 .figure { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: clamp(22px, 2.4vw, 34px); min-height: 200px; }
 .figure-value { font-family: var(--font-display); font-size: clamp(44px, 5vw, 72px); line-height: .9; letter-spacing: -.03em; color: var(--ink); display: flex; align-items: baseline; }
 .figure-unit { font-size: .5em; margin-left: .08em; color: var(--green); letter-spacing: 0; }
 .figure-label { color: var(--muted); max-width: 26ch; line-height: 1.4; }
-@media (max-width: 960px) { .who-grid { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .who-grid { grid-template-columns: 1fr; } .who-figures { grid-template-rows: none; grid-template-columns: 1fr 1fr; } }
 @media (max-width: 480px) { .who-figures { gap: 12px; } .figure { min-height: 0; padding: 18px; gap: 14px; } .figure-value { font-size: 44px; } .figure-label { font-size: 14px; } }
 
 /* Accelerating net zero: copy left, film right. */
@@ -74,3 +74,62 @@
 .enquire-lime { background: var(--lime); }
 .enquire-lime .tone { color: var(--forest); }
 @media (max-width: 860px) { .enquire-grid { grid-template-columns: 1fr; } .enquire-card { min-height: 0; } }
+
+/* Our projects: the heatmap. An Ink panel; land in Forest tints; one blurred Lime-to-Green bloom per site, sized by
+   capacity; Paper dots with a slow pulse; rows and dots highlight each other. */
+.projects-panel {
+  position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 64px);
+  padding: clamp(28px, 4vw, 56px); border-radius: var(--r-card); background: var(--ink); color: color-mix(in srgb, var(--paper) 82%, var(--ink));
+}
+.projects-panel .h2 { color: var(--paper); }
+.projects-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; min-width: 0; }
+.projects-intro { max-width: 46ch; }
+.projects-total { display: grid; gap: 4px; }
+.projects-num { display: flex; align-items: baseline; font-family: var(--font-display); font-size: clamp(64px, 7.4vw, 112px); line-height: .82; letter-spacing: -.035em; color: var(--lime); font-variant-numeric: tabular-nums; }
+.projects-unit { font-size: .42em; margin-left: .06em; letter-spacing: 0; }
+.projects-total-label { font-size: 15px; max-width: 32ch; }
+.projects-list-head { width: 100%; display: flex; justify-content: space-between; font-size: var(--fs-small); color: color-mix(in srgb, var(--paper) 60%, var(--ink)); }
+.projects-status { display: inline-flex; align-items: center; gap: 8px; color: var(--paper); font-weight: 600; }
+.projects-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 0 color-mix(in srgb, var(--lime) 60%, transparent); animation: live 2s var(--ease) infinite; }
+@keyframes live { 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.projects-list { width: 100%; display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; margin-top: -10px; }
+.project-row { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 44px 46px; align-items: center; gap: 12px; padding: 9px 0; text-align: left; font-size: 15px; color: inherit; border-bottom: 1px solid color-mix(in srgb, var(--paper) 9%, transparent); transition: color .25s var(--ease); }
+.project-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.project-mw { text-align: right; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--paper) 60%, var(--ink)); transition: color .25s var(--ease); }
+.project-bar { height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--paper) 10%, transparent); overflow: hidden; }
+.project-bar i { display: block; height: 100%; border-radius: inherit; background: var(--green); transform-origin: 0 50%; transition: background-color .25s var(--ease); }
+.project-row:hover, .project-row.is-active { color: var(--paper); }
+.project-row.is-active .project-mw { color: var(--lime); }
+.project-row.is-active .project-bar i { background: var(--lime); }
+.projects-copy .btn { margin-top: 6px; }
+
+.projects-map { position: relative; align-self: center; width: 100%; max-width: 560px; justify-self: center; aspect-ratio: 560 / 760; }
+.projects-land, .projects-heat { position: absolute; inset: 0; width: 100%; height: 100%; }
+.heat-layer { mix-blend-mode: screen; }
+.heat-layer circle { transition: opacity .35s var(--ease); }
+.projects-heat:has(.site.is-active) .heat-layer circle:not(.is-active) { opacity: .45; }
+.site { cursor: pointer; }
+.site-dot { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; transition: fill .25s var(--ease); }
+.site-pulse { fill: none; stroke: var(--lime); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.projects.is-charged .site-pulse { animation: pulse 3.2s var(--ease) var(--d) infinite; }
+@keyframes pulse { 0% { opacity: .9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(3.4); } }
+.site.is-active .site-dot { fill: var(--lime); }
+.site-label {
+  position: absolute; z-index: 2; transform: translate(-50%, calc(-100% - 16px)); white-space: nowrap; pointer-events: none;
+  padding: 8px 12px; border-radius: 12px; background: var(--paper); color: var(--ink); font-size: 14px; box-shadow: 0 10px 30px -12px rgb(0 0 0 / .5);
+}
+.site-label strong { font-weight: 600; margin-right: 4px; }
+@media (max-width: 1100px) { .projects-list { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .projects-panel { grid-template-columns: 1fr; }
+  .projects-map { order: -1; max-width: 420px; }
+  .projects-list { grid-template-columns: 1fr 1fr; column-gap: 20px; }
+}
+@media (max-width: 520px) { .projects-list { grid-template-columns: 1fr; } .projects-map { max-width: 320px; } }
+
+/* Ticker band: Lime, Ink type in the display face, moved by script (components/home/Ticker.tsx). */
+.ticker { overflow: hidden; background: var(--lime); color: var(--ink); padding-block: clamp(14px, 1.6vw, 22px); }
+.ticker-track { display: flex; width: max-content; will-change: transform; }
+.ticker-run { display: flex; }
+.ticker-item { display: inline-flex; align-items: center; gap: clamp(20px, 2.6vw, 40px); padding-right: clamp(20px, 2.6vw, 40px); font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 48px); line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
+.ticker-spark { width: .42em; height: auto; color: var(--green); }
