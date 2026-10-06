@@ -16,10 +16,10 @@ const LIME = "#ccf375", PAPER = "#f3f6f4";
    lives in three cuts that read as a spark of current, the wedge off the t, the slanted cut on the i and the s
    split by a diagonal bolt. Behind it, the Forest ground fills with Green from the bottom up, its edge lit Lime,
    while a counter runs 0 to 100%.
-     Build   0.10–0.65s  v o l t w i e rise and fade in, 0.06s apart
+     Build   0.10–0.65s  v o l t, the t's wedge (Lime), w i, the two halves of the s closing on the bolt (Lime), e
      Charge  0.10–1.40s  ground and counter run to 90%
              then waits for the hero's assets (fonts, poster frame, enough film to play), at most 0.8s more
-     Full    +0.35s      90 to 100%; the spark lights: the t's wedge drops in and the s halves close on the bolt, in Lime
+     Full    +0.35s      90 to 100%; the Lime spark flashes once
      Hold    +0.30s      the spark cools to Paper
      Exit    +0.60s      the word glides into the header logo position while the charged ground wipes up off the
                          screen, uncovering the hero film under its Green veil (no colour jump)
@@ -73,10 +73,16 @@ export default function Preloader() {
     const level = { v: 0 };
     const show = () => { if (count) count.textContent = String(Math.round(level.v)); };
 
-    gsap.set(spark, { opacity: 0 });
+    // The word builds left to right, the spark pieces in their own places: the t's wedge snaps on right after the
+    // t, the two halves of the s close on the bolt between the i and the e (review 3: they used to wait for 100%).
     const build = gsap.timeline({ defaults: { ease: "power3.out", duration: .45 } });
     build.set(el.querySelector(".preloader-sign"), { autoAlpha: 1 })
-      .fromTo(plain, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: .06 }, .1)
+      .fromTo(plain.slice(0, 4), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: .06 }, .1) // v o l t
+      .fromTo(part("t-flag"), { y: -10, opacity: 0, fill: LIME }, { y: 0, opacity: 1, fill: LIME, duration: .3 }, .3)
+      .fromTo(plain.slice(4, 6), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: .06 }, .34) // w i
+      .fromTo(part("s-high"), { x: 6, y: -6, opacity: 0, fill: LIME }, { x: 0, y: 0, opacity: 1, fill: LIME, duration: .3 }, .44)
+      .fromTo(part("s-low"), { x: -6, y: 6, opacity: 0, fill: LIME }, { x: 0, y: 0, opacity: 1, fill: LIME, duration: .3 }, .44)
+      .fromTo(plain[6], { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1 }, .5) // e
       .fromTo(el.querySelector(".preloader-meta"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5 }, .2)
       .to(level, { v: 90, duration: 1.3, ease: "power1.inOut", onUpdate: show }, .1)
       .fromTo(charge, { yPercent: 100, opacity: 1 }, { yPercent: 10, opacity: 1, duration: 1.3, ease: "power1.inOut", immediateRender: true }, .1);
@@ -87,10 +93,9 @@ export default function Preloader() {
       land = gsap.timeline({ defaults: { ease: "power3.out" }, onComplete: finish });
       land.to(level, { v: 100, duration: .35, ease: "power2.out", onUpdate: show }, 0)
         .to(charge, { yPercent: 0, duration: .35, ease: "power2.out" }, 0)
-        .fromTo(part("t-flag"), { y: -12, opacity: 0, fill: LIME }, { y: 0, opacity: 1, fill: LIME, duration: .35 }, .05)
-        .fromTo(part("s-high"), { x: 6, y: -6, opacity: 0, fill: LIME }, { x: 0, y: 0, opacity: 1, fill: LIME, duration: .35 }, .1)
-        .fromTo(part("s-low"), { x: -6, y: 6, opacity: 0, fill: LIME }, { x: 0, y: 0, opacity: 1, fill: LIME, duration: .35 }, .1)
-        .to(spark, { fill: PAPER, duration: .3, ease: "volt" }, .45)
+        // Full charge: the spark flashes brighter for a beat, then cools to Paper with the rest of the word.
+        .to(spark, { scale: 1.08, transformOrigin: "50% 50%", duration: .18, ease: "power2.out", yoyo: true, repeat: 1 }, .05)
+        .to(spark, { fill: PAPER, duration: .3, ease: "volt" }, .4)
         .addLabel("exit", .7)
         .to(el.querySelector(".preloader-meta"), { opacity: 0, y: -10, duration: .3, ease: "power2.in" }, "exit")
         .add(() => {

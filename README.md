@@ -93,11 +93,11 @@ Eight sections in the live page's own order plus the projects heatmap from `/pro
 
 | Width × height | Total | Viewport heights |
 |---|---|---|
-| 1440 × 900 | 8,553px (includes the 990px hero pin and the 900px projects pin) | 9.5 |
+| 1440 × 900 | 7,694px (includes the 990px hero pin) | 8.5 |
 | 768 × 1024 | 9,082px | 8.9 |
-| 375 × 812 | 9,630px | 11.9 (single-column stacking, no projects pin) |
+| 375 × 812 | 9,880px | 12.2 (single-column stacking) |
 
-The page sits over the 8-screen target since reviews 1 and 2 added the projects section and its pinned sequence, both at the client's request; the four "Who we are" figures were cut to two (460MW and the 11 projects now live in the heatmap) to offset it.
+The page sits slightly over the 8-screen target since review 1 added the projects section at the client's request (the projects pin from review 2 was removed in review 3); the four "Who we are" figures were cut to two (460MW and the 11 projects now live in the heatmap) to offset it.
 
 ## Content counts: live homepage vs this build
 
@@ -132,10 +132,10 @@ Source: `virya-energy.com/wp-content/themes/virya/assets/build/resources_js_bloc
 
 | Time | Stage |
 |---|---|
-| 0.10 to 0.65s | `v o l t w i e` rise and fade in, 0.06s apart; "Intelligent Energy Storage" and the counter fade up |
+| 0.10 to 0.65s | the word builds left to right with its spark in place: `v o l t`, the t's wedge (Lime), `w i`, the two halves of the `s` closing on the bolt (Lime), `e` (review 3: the spark used to wait for 100% and arrived too late); "Intelligent Energy Storage" and the counter fade up |
 | 0.10 to 1.40s | the Green charge rises from the bottom of the Forest ground (its edge lit Lime) and the counter runs to 90% |
 | then | waits for the hero's own assets (web fonts, the poster frame, `canplay` on the film), at most 0.8s more |
-| +0.35s | 90 to 100%; the spark: the t's wedge drops in and the two halves of the `s` close on the bolt, lit Lime |
+| +0.35s | 90 to 100%; the Lime spark flashes once (a small scale pulse) |
 | +0.30s | the spark cools to Paper |
 | +0.60s | the counter lifts away, the word glides into the header logo position (measured at exit time) and the charged ground wipes up, uncovering the film under its Green veil |
 
@@ -149,13 +149,13 @@ The hero film only starts after the handover: Chrome stops painting a muted vide
 
 `components/home/Projects.tsx`, data in `lib/uk-map.ts`, outline in `public/media/uk-map.svg`, both from `scripts/map.mjs`.
 
-**Review 2 (5 Oct 2026):** "I want it scroll that grey bg expand to full. And make this most sophisticated." The section is now a three-act scroll piece:
+**Review 2 (5 Oct 2026):** "scroll that grey bg expand to full". **Review 3 (6 Oct 2026):** "too much scroll here… remove the scroll function, and it should just be a heat map. The numbers can go up as you hover over the different sections." So the section is now:
 
-1. **Expand.** The Ink panel is full-bleed but clipped to a rounded card on the page's content edge (measured from a zero-height `.wrap` ruler, so it is exact at every width). As it rises, the clip opens to the screen edges and the 28px corners square off, scrubbed from "top bottom" to "top top"; the map scales up from 90% with it. The content never moves: it sits on the page grid inset by `--panel-pad`, as it did inside the card.
-2. **Charge the grid** (≥ 900px). The panel pins for one screen height. The scroll brings the 11 sites online one by one, north to south: bloom (with a slight overshoot) and dot light, the row turns on and its bar fills, the label card follows the newest site (name, MW, share of the 460MW), the counter adds the capacity, and a meter reads `07 / 11 sites`. Phones play the same sequence once, over 2.2s, when the panel enters.
-3. **Explore.** When everything is online, the dots keep a staggered Lime pulse and the heat breathes. Hovering or focusing a row lights its site (the other blooms dim) and vice versa. The map leans up to 5° toward the pointer.
+1. **Expand** (kept from review 2). The Ink panel is full-bleed but clipped to a rounded card on the page's content edge (measured from a zero-height `.wrap` ruler, so it is exact at every width). As it rises, the clip opens to the screen edges and the corners square off, scrubbed; the map scales up from 90% with it. No pin: the page never stops scrolling here.
+2. **Entrance.** Once, when the panel reaches 45% of the viewport, the sites light up north to south over 1.8s while the number runs up to 460MW.
+3. **Hover by region.** The 11 sites are grouped into the five UK regions they sit in: Scotland 60MW (Erskine, Drumcross), Yorkshire & the East Midlands 90MW (Barnsley, Newtonwood), the West Midlands 50MW (Wolverhampton), the East of England 180MW (Burwell I and II, Brook Farm, Brentwood), the South West 80MW (Berkeley, North Tawton). Moving over the map picks the region of the nearest site (within ~95 map units, nothing over open sea): its sites brighten and swell, the rest dim and stop pulsing, a card names the region with its MW and site count, and the big number **counts up from zero** to the region's capacity ("across 4 sites in the East of England"). Five region chips under the number do the same for keyboard and touch; each row in the list does it for a single site ("at Wolverhampton, 11% of the portfolio"). Leaving returns the number to 460MW. Taps work on the map too. The map leans up to 5° toward the pointer.
 
-Reduced motion: no clip, no pin, every site online from the start. Without JS the server render shows the finished state.
+Reduced motion: no clip, every site lit, numbers change without counting. Without JS the server render shows the finished state with 460MW.
 
 - **Outline:** Natural Earth 1:10m (world-atlas `countries-10m.json`): Great Britain + Northern Ireland, Ireland faint for context, Mercator fitted to mainland Britain, specks under 3px² dropped. Shipped as a 106KB static SVG, outside the JS bundle.
 - **Positions:** read off the live `/projects` map image. That image is a Web Mercator render, so it is calibrated on its own labelled cities (Edinburgh, Newcastle, Nottingham, Cardiff, London; least-squares fit) and each green dot is converted back to lat/lon (Wolverhampton, Brentwood and North Tawton land within ~0.1° of the real towns). Burwell I and II share a site; like the live map they sit side by side.

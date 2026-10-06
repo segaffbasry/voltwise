@@ -89,21 +89,28 @@
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 72px); align-items: center;
   padding: clamp(48px, 6vw, 80px) calc(var(--gutter) + var(--panel-pad));
 }
-@media (min-width: 900px) { .projects-inner { min-height: 100svh; } }
 .projects-panel .h2 { color: var(--paper); }
 .projects-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; min-width: 0; }
 .projects-intro { max-width: 46ch; }
 .projects-total { display: grid; gap: 6px; }
 .projects-num { display: flex; align-items: baseline; font-family: var(--font-display); font-size: clamp(64px, 7vw, 108px); line-height: .82; letter-spacing: -.035em; color: var(--lime); font-variant-numeric: tabular-nums; }
 .projects-unit { font-size: .42em; margin-left: .06em; letter-spacing: 0; }
-.projects-total-label { font-size: 15px; max-width: 34ch; }
+.projects-total-label { font-size: 15px; max-width: 36ch; min-height: 3em; animation: fade-up .35s var(--ease); }
+@keyframes fade-up { from { opacity: 0; transform: translateY(4px); } }
 .projects-list-head { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: var(--fs-small); color: color-mix(in srgb, var(--paper) 60%, var(--ink)); }
 .projects-status { display: inline-flex; align-items: center; gap: 8px; color: var(--paper); font-weight: 600; }
 .projects-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); animation: live 2s var(--ease) infinite; }
 @keyframes live { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lime) 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
-.projects-progress { display: inline-flex; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; }
-.projects-meter { width: clamp(64px, 8vw, 120px); height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--paper) 14%, transparent); overflow: hidden; }
-.projects-meter i { display: block; height: 100%; background: var(--lime); transform-origin: 0 50%; transition: transform .5s var(--ease); }
+.projects-regions { display: flex; flex-wrap: wrap; gap: 8px; }
+.region-chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; font-size: 14px;
+  color: color-mix(in srgb, var(--paper) 82%, var(--ink)); background: color-mix(in srgb, var(--paper) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--paper) 10%, transparent);
+  transition: background-color var(--dur-btn) var(--ease-btn), color var(--dur-btn) var(--ease-btn), border-color var(--dur-btn) var(--ease-btn), transform var(--dur-btn) var(--ease-btn);
+}
+.region-chip span { font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--paper) 50%, var(--ink)); transition: color var(--dur-btn) var(--ease-btn); }
+.region-chip:hover, .region-chip.is-active { background: var(--lime); color: var(--ink); border-color: var(--lime); transform: scale(.97); }
+.region-chip:hover span, .region-chip.is-active span { color: var(--forest); }
 .projects-list { width: 100%; display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; margin-top: -8px; }
 .project-row {
   width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 44px 46px; align-items: center; gap: 12px; padding: 8px 0; text-align: left; font-size: 15px;
@@ -116,7 +123,9 @@
 .project-bar i { display: block; height: 100%; border-radius: inherit; background: var(--green); transform-origin: 0 50%; transform: scaleX(0); transition: transform .7s var(--ease), background-color .3s var(--ease); }
 .project-row.is-on { color: color-mix(in srgb, var(--paper) 82%, var(--ink)); }
 .project-row.is-on .project-bar i { transform: scaleX(1); }
-.project-row:hover, .project-row.is-active { color: var(--paper); border-color: color-mix(in srgb, var(--lime) 40%, transparent); }
+.project-row.is-on.is-dim { color: color-mix(in srgb, var(--paper) 30%, var(--ink)); }
+.project-row.is-dim .project-bar i { background: color-mix(in srgb, var(--green) 45%, var(--ink)); }
+.project-row.is-active { color: var(--paper); border-color: color-mix(in srgb, var(--lime) 40%, transparent); }
 .project-row.is-active .project-mw { color: var(--lime); }
 .project-row.is-active .project-bar i { background: var(--lime); }
 .projects-copy .btn { margin-top: 4px; }
@@ -128,12 +137,15 @@
 .heat-layer { mix-blend-mode: screen; }
 .bloom { opacity: 0; transform: scale(.2); transform-box: fill-box; transform-origin: center; transition: opacity .9s var(--ease), transform 1.1s cubic-bezier(.2, 1.4, .4, 1); }
 .bloom.is-on { opacity: 1; transform: none; }
-.bloom.is-on.is-dim { opacity: .4; }
+.bloom.is-on.is-dim { opacity: .22; }
+.bloom.is-on.is-hot { transform: scale(1.18); }
 .projects.is-charged .bloom.is-on:not(.is-dim) { animation: breathe 5s ease-in-out infinite; }
 @keyframes breathe { 50% { opacity: .78; } }
-.site { cursor: pointer; }
 .site-dot { fill: color-mix(in srgb, var(--paper) 18%, var(--ink)); stroke: var(--ink); stroke-width: 1.5; transition: fill .4s var(--ease); }
 .site.is-on .site-dot { fill: var(--paper); }
+.site.is-dim .site-dot { fill: color-mix(in srgb, var(--paper) 30%, var(--ink)); }
+
+.projects-heat { cursor: crosshair; }
 .site.is-active .site-dot { fill: var(--lime); }
 .site-ring { fill: none; stroke: var(--lime); stroke-width: 1.2; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.4); transition: opacity .35s var(--ease), transform .5s var(--ease); }
 .site.is-active .site-ring { opacity: .9; transform: none; }
@@ -167,3 +179,5 @@
 .ticker-item { display: inline-flex; align-items: center; gap: clamp(20px, 2.6vw, 40px); padding-right: clamp(20px, 2.6vw, 40px); font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 48px); line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
 .ticker-spark { width: .42em; height: auto; color: var(--green); }
 .projects-ruler { height: 0; }
+/* While a region or site is selected, only the selection keeps pulsing. */
+.projects.is-charged.has-sel .site.is-dim .site-pulse { animation: none; opacity: 0; }
