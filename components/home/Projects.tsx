@@ -185,7 +185,7 @@ export function Projects() {
         </div>
 
         <figure className="projects-map" aria-label={`Map of Great Britain showing the ${N} Voltwise projects`}>
-          <div className="projects-map-tilt">
+          <div className="projects-map-tilt" style={{ aspectRatio: `${MAP_W} / ${MAP_H}` }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="projects-land" src="/media/uk-map.svg" alt="" width={MAP_W} height={MAP_H} />
             <svg className="projects-heat" viewBox={`0 0 ${MAP_W} ${MAP_H}`} aria-hidden="true"

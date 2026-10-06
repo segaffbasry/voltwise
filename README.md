@@ -157,7 +157,7 @@ The hero film only starts after the handover: Chrome stops painting a muted vide
 
 Reduced motion: no clip, every site lit, numbers change without counting. Without JS the server render shows the finished state with 460MW.
 
-- **Outline:** Natural Earth 1:10m (world-atlas `countries-10m.json`): Great Britain + Northern Ireland, Ireland faint for context, Mercator fitted to mainland Britain, specks under 3px² dropped. Shipped as a 106KB static SVG, outside the JS bundle.
+- **Outline:** Natural Earth 1:10m (world-atlas `countries-10m.json`): Great Britain + Northern Ireland, Ireland faint for context. Since review 4 the frame fits both islands whole (it used to fit mainland Britain and cut Ireland off with a straight edge): specks under 3px² and Shetland are dropped first, then Mercator is fitted to what is left with an even 24px margin, and the frame width follows (582×760). Shipped as a 106KB static SVG, outside the JS bundle.
 - **Positions:** read off the live `/projects` map image. That image is a Web Mercator render, so it is calibrated on its own labelled cities (Edinburgh, Newcastle, Nottingham, Cardiff, London; least-squares fit) and each green dot is converted back to lat/lon (Wolverhampton, Brentwood and North Tawton land within ~0.1° of the real towns). Burwell I and II share a site; like the live map they sit side by side.
 - **Heat:** one radial bloom per site (Lime core to Green to clear), radius ∝ √MW, Gaussian-blurred and screen-blended, so the 50MW sites glow wider and neighbours (Burwell, Brook Farm, Brentwood) merge into one warm patch.
 

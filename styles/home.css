@@ -130,8 +130,8 @@
 .project-row.is-active .project-bar i { background: var(--lime); }
 .projects-copy .btn { margin-top: 4px; }
 
-.projects-map { position: relative; align-self: center; width: 100%; max-width: 560px; justify-self: center; }
-.projects-map-tilt { position: relative; aspect-ratio: 560 / 760; will-change: transform; }
+.projects-map { position: relative; align-self: center; width: 100%; max-width: 600px; justify-self: center; }
+.projects-map-tilt { position: relative; will-change: transform; } /* aspect-ratio set inline from lib/uk-map.ts */
 .projects-land, .projects-heat { position: absolute; inset: 0; width: 100%; height: 100%; }
 .projects-heat { overflow: visible; }
 .heat-layer { mix-blend-mode: screen; }
